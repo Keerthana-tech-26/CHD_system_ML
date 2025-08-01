@@ -68,6 +68,9 @@ chd-diagnosis-system/
 3. Chat with the AI bot for personalized advice
 4. Review detailed explanations and recommendations
 
+##Visit page:
+http://192.168.0.104:3000
+
 ## Dataset
 
 Uses a comprehensive 70,000+ patient heart disease dataset with features like:
