@@ -36,6 +36,7 @@ export default function ResultsDisplay() {
           setMetrics(data.metrics || {});
         })
         .catch((err) => {
+          console.error("Failed to fetch metrics:", err);
           if (result?.metrics) {
             setMetrics(result.metrics);
           }
@@ -86,6 +87,7 @@ export default function ResultsDisplay() {
           f1_score: metrics.f1_score?.[label] ?? 0,
         }))
       : [];
+
   const confidenceData = [
     { name: 'Confidence', value: probability * 100 },
     { name: 'Uncertainty', value: (1 - probability) * 100 }
@@ -164,7 +166,7 @@ export default function ResultsDisplay() {
     <div className="results-container">
       <div className="results-header">
         <h1>🏥 Health Assessment Results</h1>
-        <p>Comprehensive cardiovascular risk analysis</p>
+        <p>Comprehensive CHD risk analysis</p>
       </div>
 
       <div className={`result-card ${isAtRisk ? 'at-risk' : 'no-risk'}`}>
@@ -175,7 +177,7 @@ export default function ResultsDisplay() {
           <h2>{isAtRisk ? 'Risk Detected' : 'Low Risk'}</h2>
           <p className="result-description">
             {isAtRisk 
-              ? 'Our analysis indicates potential cardiovascular risk factors.' 
+              ? 'Our analysis indicates potential CHD risk factors.' 
               : 'Your cardiovascular health appears to be in good condition.'
             }
           </p>
@@ -207,6 +209,7 @@ export default function ResultsDisplay() {
         </div>
       </div>
 
+      {/* Patient Information */}
       <div className="info-grid">
         <div className="info-card">
           <div className="info-icon">👤</div>
@@ -241,6 +244,7 @@ export default function ResultsDisplay() {
         </div>
       </div>
 
+      {/* Recommendations */}
       <div className="recommendations-card">
         <h3>📋 Medical Recommendations</h3>
         <div className="recommendation-content">
@@ -264,6 +268,7 @@ export default function ResultsDisplay() {
         )}
       </div>
 
+      {/* Model Performance Metrics */}
       {metrics && chartData.length > 0 && (
         <div className="metrics-section">
           <h3>📊 Model Performance Analysis</h3>
@@ -317,6 +322,7 @@ export default function ResultsDisplay() {
         </div>
       )}
 
+      {/* Navigation */}
       <div className="results-navigation">
         <button onClick={() => navigate("/")} className="btn-secondary">
           ← New Assessment

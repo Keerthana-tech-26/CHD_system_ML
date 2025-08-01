@@ -77,12 +77,12 @@
 }
 
 .error-card h2 {
-  color: #e74c3c;
+  color: #e18f86;
   margin: 0 0 15px 0;
 }
 
 .error-card p {
-  color: #7f8c8d;
+  color: #000000;
   margin: 0 0 30px 0;
   font-size: 1.1em;
 }
@@ -110,7 +110,7 @@
 }
 
 .result-card.at-risk::before {
-  background: linear-gradient(90deg, #e74c3c, #c0392b);
+  background: linear-gradient(90deg, #d18f87, #050505);
 }
 
 .result-icon {
@@ -130,7 +130,7 @@
 }
 
 .result-card.at-risk .result-content h2 {
-  color: #e74c3c;
+  color: #000000;
 }
 
 .result-card.no-risk .result-content h2 {
@@ -139,7 +139,7 @@
 
 .result-description {
   font-size: 1.2em;
-  color: #7f8c8d;
+  color: #0e0371;
   margin: 0 0 20px 0;
   line-height: 1.6;
 }

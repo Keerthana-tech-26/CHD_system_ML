@@ -2,12 +2,11 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import pandas as pd
-import traceback
-import json
 
 app = Flask(__name__)
 CORS(app)
 
+# Load scaler and features
 scaler = joblib.load("models/scaler.pkl")
 model_features = joblib.load("models/model_features.pkl")
 
@@ -54,10 +53,8 @@ def predict():
         if model_name not in MODEL_PATHS:
             return jsonify({"error": f"Invalid model name: '{model_name}'. Choose from {list(MODEL_PATHS.keys())}"}), 400
         
-        model_path = MODEL_PATHS[model_name]
-        
         try:
-            model = joblib.load(model_path)
+            model = joblib.load(MODEL_PATHS[model_name])
         except Exception as load_error:
             return jsonify({"error": f"Failed to load model: {load_error}"}), 500
         
@@ -75,20 +72,34 @@ def predict():
         prediction = model.predict(scaled_input)[0]
         probability = model.predict_proba(scaled_input)[0][prediction]
         
-        metrics = MODEL_METRICS.get(model_name, {})
-        
         response_data = {
             "result": int(prediction),
             "probability": float(probability),
             "model_used": model_name,
             "model": model_name,
-            "metrics": metrics
+            "metrics": MODEL_METRICS.get(model_name, {})
         }
         
         return jsonify(response_data)
         
     except Exception as e:
-        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/model-metrics/<model_name>", methods=["GET"])
+def get_model_metrics(model_name):
+    try:
+        if model_name not in MODEL_METRICS:
+            return jsonify({
+                "error": f"Model metrics not found for '{model_name}'",
+                "available_models": list(MODEL_METRICS.keys())
+            }), 404
+        
+        return jsonify({
+            "model": model_name,
+            "metrics": MODEL_METRICS[model_name]
+        })
+        
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route("/test", methods=["GET", "POST"])
@@ -99,8 +110,7 @@ def test_endpoint():
             "available_models": list(MODEL_PATHS.keys())
         })
     else:
-        data = request.get_json()
-        return jsonify({"received": data})
+        return jsonify({"received": request.get_json()})
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
