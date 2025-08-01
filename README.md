@@ -24,9 +24,6 @@ cd frontend
 npm install
 npm start
 ```
-
-Visit `http://localhost:3000` and you're ready to go!
-
 ## Features
 
 ✅ **Machine Learning Models** - Random Forest and Logistic Regression  
