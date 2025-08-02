@@ -35,23 +35,27 @@ npm start
 ## Project Structure
 
 ```
-chd-diagnosis-system/
-├── backend/                    # Flask API server
-│   ├── app.py                 # Main application
-│   ├── models/                # ML models & chatbot logic
-│   ├── routes/                # API endpoints
-│   ├── utils/                 # Data processing utilities
-│   └── data/                  # Dataset & trained models
-├── frontend/                   # React application
-│   ├── src/
-│   │   ├── components/        # UI components
-│   │   ├── services/          # API communication
-│   │   └── styles/            # CSS styling
-│   └── public/                # Static assets
-├── dataset/                    # Raw & processed data
-├── models/                     # Trained ML models & notebooks
-├── docs/                       # Documentation
-└── tests/                      # Test files
+CHD-DIAGNOSIS-SYSTEM/
+├── backend/
+│ ├── controllers/
+│ ├── database/
+│ ├── models/
+│ ├── routes/
+├── frontend/
+│ ├── node_modules/
+│ ├── public/
+│ └── src/
+│ ├── components/
+│ ├── services/
+│ ├── styles/
+│ ├── App.js
+├── ml-api/
+│ ├── data/
+│ ├── models/
+│ │ ├── chd_model.py
+│ │ ├── data_processor.py
+│ ├── app.py
+│ └── package.json
 ```
 
 ## Tech Stack
