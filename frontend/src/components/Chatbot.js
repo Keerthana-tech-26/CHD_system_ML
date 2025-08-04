@@ -12,50 +12,78 @@ const Chatbot = () => {
   const [input, setInput] = useState("");
   const [latestDiagnosis, setLatestDiagnosis] = useState(null);
   const [contextUsed, setContextUsed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const patientName = localStorage.getItem("currentPatientName") || localStorage.getItem("patientId");
 
   useEffect(() => {
     if (!patientName) {
+      console.warn("❗ No patient name found in localStorage.");
       setMessages([
         {
           reply: "⚠️ No patient ID found. Please complete a diagnosis first.",
+          timestamp: new Date(),
         },
       ]);
+      setIsLoading(false);
       return;
     }
     
     const fetchChatHistoryAndDiagnosis = async () => {
+      setIsLoading(true);
+      
       try {
+        // Fetch chat history
+        console.log("🔍 Fetching chat history for patient:", patientName);
         const history = await getChatHistory(patientName);
+        console.log("📨 Fetched chat history:", history);
+        
         if (Array.isArray(history) && history.length > 0) {
           const formattedMessages = [];
-          history.forEach(chat => {
-            formattedMessages.push({ message: chat.message });
-            formattedMessages.push({ reply: chat.reply });
+          history.forEach((chat, index) => {
+            // Add user message
+            formattedMessages.push({ 
+              message: chat.message,
+              timestamp: chat.createdAt,
+              id: `user-${index}` 
+            });
+            // Add bot reply
+            formattedMessages.push({ 
+              reply: chat.reply,
+              timestamp: chat.createdAt,
+              id: `bot-${index}` 
+            });
           });
           setMessages(formattedMessages);
+          console.log("✅ Chat history loaded successfully:", formattedMessages.length, "messages");
         } else {
+          console.log("📭 No chat history found, starting with empty messages");
           setMessages([]);
         }
       } catch (err) {
+        console.error("❌ Failed to load chat history:", err);
         setMessages([]);
       }
       
       try {
+        // Fetch latest diagnosis
+        console.log("🔍 Fetching latest diagnosis for patient:", patientName);
         const diagnosis = await getLatestDiagnosis(patientName);
-        if (
-          diagnosis &&
-          (diagnosis.prediction !== undefined ||
-            diagnosis.result !== undefined)
-        ) {
+        console.log("🩺 Latest diagnosis:", diagnosis);
+        
+        if (diagnosis && (diagnosis.prediction !== undefined || diagnosis.result !== undefined)) {
           setLatestDiagnosis(diagnosis);
           setContextUsed(false);
+          console.log("✅ Latest diagnosis loaded successfully");
         } else {
+          console.log("📭 No diagnosis found");
           setLatestDiagnosis(null);
         }
       } catch (err) {
+        console.error("❌ Failed to fetch latest diagnosis:", err);
         setLatestDiagnosis(null);
       }
+      
+      setIsLoading(false);
     };
     
     fetchChatHistoryAndDiagnosis();
@@ -65,61 +93,125 @@ const Chatbot = () => {
     if (!input.trim()) return;
     
     const userMessage = input.trim();
-    const newUserMessage = { message: userMessage };
+    const timestamp = new Date();
+    
+    // Add user message immediately
+    const newUserMessage = { 
+      message: userMessage, 
+      timestamp,
+      id: `user-${Date.now()}`
+    };
     setMessages(prevMessages => [...prevMessages, newUserMessage]);
     setInput("");
 
-    if (!latestDiagnosis) {
-      const reply = "⚠️ No diagnosis found for you yet. Please complete a prediction first.";
-      setMessages(prevMessages => [...prevMessages, { reply }]);
-      return;
-    }
-
     try {
-      const context = {
-        prediction: latestDiagnosis.prediction ?? latestDiagnosis.result,
-        model: latestDiagnosis.model || "unknown",
-        probability: latestDiagnosis.probability,
-      };
+      let context = null;
+      
+      if (latestDiagnosis) {
+        context = {
+          prediction: latestDiagnosis.prediction ?? latestDiagnosis.result,
+          model: latestDiagnosis.model || "unknown",
+          probability: latestDiagnosis.probability,
+        };
+      }
 
-      const response = await fetch(
-        `http://localhost:4000/api/chatbot/respond`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: userMessage,
-            patientId: patientName,
-            context,
-          }),
-        }
-      );
+      // Send message to backend
+      const response = await fetch(`http://localhost:4000/api/chatbot/respond`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: userMessage,
+          patientId: patientName,
+          context,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
-      const botReply = { reply: data.reply || "⚠️ No response from bot." };
+      console.log("🤖 Bot response:", data);
+      
+      // Add bot reply
+      const botReply = { 
+        reply: data.reply || "⚠️ No response from bot.",
+        timestamp: new Date(),
+        id: `bot-${Date.now()}`
+      };
       setMessages(prevMessages => [...prevMessages, botReply]);
 
-      if (!contextUsed) setContextUsed(true);
+      if (!contextUsed && latestDiagnosis) setContextUsed(true);
+      
     } catch (err) {
-      const errorReply = { reply: "⚠️ Something went wrong." };
+      console.error("❌ Chatbot error:", err);
+      const errorReply = { 
+        reply: "⚠️ Something went wrong. Please try again.",
+        timestamp: new Date(),
+        id: `error-${Date.now()}`
+      };
       setMessages(prevMessages => [...prevMessages, errorReply]);
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") handleSendMessage();
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
   };
 
   const handleClearChat = async () => {
-    if (!patientName) return;
+    if (!patientName) {
+      alert("No patient ID found. Cannot clear chat history.");
+      return;
+    }
+    
+    // Show confirmation dialog
+    const confirmClear = window.confirm("Are you sure you want to clear all chat history? This action cannot be undone.");
+    if (!confirmClear) return;
     
     try {
-      await clearChatHistory(patientName);
-      setMessages([]);
+      console.log("🗑️ Clearing chat history for patient:", patientName);
+      const result = await clearChatHistory(patientName);
+      console.log("✅ Clear chat result:", result);
+      
+      if (result.success) {
+        setMessages([]);
+        console.log("✅ Chat history cleared successfully");
+        
+        // Show success message temporarily
+        setMessages([{
+          reply: "✅ Chat history cleared successfully!",
+          timestamp: new Date(),
+          id: "clear-success"
+        }]);
+        
+        // Remove success message after 2 seconds
+        setTimeout(() => {
+          setMessages([]);
+        }, 2000);
+      } else {
+        throw new Error(result.message || "Failed to clear chat history");
+      }
     } catch (err) {
+      console.error("❌ Failed to clear chat history:", err);
       alert("Failed to clear chat history. Please try again.");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="chatbot-container">
+        <h2>💬 AI Health Assistant</h2>
+        <div className="chat-window">
+          <div className="loading">
+            <p>🔄 Loading chat history...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="chatbot-container">
@@ -133,7 +225,7 @@ const Chatbot = () => {
         ) : (
           messages.map((msg, idx) => (
             <div
-              key={`chat-${idx}`}
+              key={msg.id || `chat-${idx}`}
               className={`chat-bubble ${msg.message ? "user" : "bot"}`}
             >
               {msg.message && (
@@ -147,6 +239,11 @@ const Chatbot = () => {
                   }}
                 />
               )}
+              {msg.timestamp && (
+                <div className="message-timestamp">
+                  {new Date(msg.timestamp).toLocaleTimeString()}
+                </div>
+              )}
             </div>
           ))
         )}
@@ -158,14 +255,27 @@ const Chatbot = () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
           placeholder="Ask something..."
+          disabled={isLoading}
         />
-        <button onClick={handleSendMessage} disabled={!input.trim()}>
+        <button 
+          onClick={handleSendMessage} 
+          disabled={!input.trim() || isLoading}
+        >
           Send
         </button>
-        <button onClick={handleClearChat} className="clear-btn">
+        <button 
+          onClick={handleClearChat} 
+          className="clear-btn"
+          disabled={isLoading}
+        >
           Clear Chat
         </button>
       </div>
+      {patientName && (
+        <div className="patient-info">
+          <small>Patient: {patientName}</small>
+        </div>
+      )}
     </div>
   );
 };

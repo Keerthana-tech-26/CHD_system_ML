@@ -9,6 +9,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background: white;
 }
+
 .chatbot-container h2 {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -18,6 +19,7 @@
   text-align: center;
   font-size: 1.2em;
 }
+
 .chat-window {
   flex: 1;
   overflow-y: auto;
@@ -27,27 +29,67 @@
   flex-direction: column;
   gap: 15px;
 }
+
+.chat-window::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-window::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.chat-window::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+.loading {
+  text-align: center;
+  color: #666;
+  padding: 40px 20px;
+}
+
+.loading p {
+  font-size: 1.1em;
+  margin: 10px 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
 .no-messages {
   text-align: center;
   color: #666;
   padding: 40px 20px;
 }
+
 .no-messages p {
   margin: 10px 0;
   font-size: 1.1em;
 }
+
 .chat-bubble {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
   animation: fadeIn 0.3s ease-in;
 }
+
 .chat-bubble.user {
   align-items: flex-end;
 }
+
 .chat-bubble.bot {
   align-items: flex-start;
 }
+
 .user-message {
   background: #007bff;
   color: white;
@@ -57,6 +99,7 @@
   word-wrap: break-word;
   box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
 }
+
 .bot-reply {
   background: white;
   color: #333;
@@ -67,9 +110,17 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-left: 4px solid #28a745;
 }
+
 .bot-reply strong {
   color: #dc3545;
 }
+.message-timestamp {
+  font-size: 0.75em;
+  color: #888;
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
 .input-area {
   display: flex;
   padding: 15px 20px;
@@ -78,6 +129,7 @@
   border-radius: 0 0 10px 10px;
   gap: 10px;
 }
+
 .input-area input {
   flex: 1;
   padding: 12px 15px;
@@ -87,10 +139,17 @@
   font-size: 14px;
   transition: border-color 0.3s ease;
 }
+
 .input-area input:focus {
   border-color: #007bff;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
+
+.input-area input:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
 .input-area button {
   padding: 12px 20px;
   border: none;
@@ -100,65 +159,93 @@
   transition: all 0.3s ease;
   font-size: 14px;
 }
+
 .input-area button:first-of-type {
   background: #007bff;
   color: white;
 }
+
 .input-area button:first-of-type:hover:not(:disabled) {
   background: #0056b3;
   transform: translateY(-1px);
 }
+
 .input-area button:first-of-type:disabled {
   background: #ccc;
   cursor: not-allowed;
+  transform: none;
 }
+
 .clear-btn {
   background: #dc3545 !important;
   color: white !important;
 }
-.clear-btn:hover {
+
+.clear-btn:hover:not(:disabled) {
   background: #c82333 !important;
   transform: translateY(-1px);
 }
-.chat-window::-webkit-scrollbar {
-  width: 6px;
+
+.clear-btn:disabled {
+  background: #6c757d !important;
+  cursor: not-allowed;
+  transform: none;
 }
-.chat-window::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
+.patient-info {
+  text-align: center;
+  padding: 8px 15px;
+  background: #e3f2fd;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 10px 10px;
 }
-.chat-window::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 3px;
-}
-.chat-window::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
+.patient-info small {
+  color: #1976d2;
+  font-weight: 500;
 }
 @media (max-width: 768px) {
   .chatbot-container {
-    height: 500px;
     margin: 10px;
-    max-width: none;
+    padding: 15px;
   }
+  
+  .chat-window {
+    height: 300px;
+  }
+  
   .user-message,
   .bot-reply {
     max-width: 85%;
+    font-size: 0.9rem;
   }
+  
   .input-area {
     flex-direction: column;
     gap: 8px;
   }
+  
+  .input-area input {
+    width: 100%;
+  }
+  
   .input-area button {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .chatbot-container h2 {
+    font-size: 1.5rem;
+  }
+  
+  .chat-window {
+    height: 250px;
+    padding: 10px;
+  }
+  
+  .user-message,
+  .bot-reply {
+    max-width: 90%;
+    padding: 10px 14px;
   }
 }
