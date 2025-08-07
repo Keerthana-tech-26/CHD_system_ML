@@ -47,6 +47,8 @@
 .chat-window::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+/* Loading indicator */
 .loading {
   text-align: center;
   color: #666;
@@ -114,11 +116,18 @@
 .bot-reply strong {
   color: #dc3545;
 }
+
+/* Message timestamps */
 .message-timestamp {
   font-size: 0.75em;
   color: #888;
   margin-top: 4px;
   padding: 0 4px;
+}
+
+.model-attribution {
+  color: #666;
+  font-style: italic;
 }
 
 .input-area {
@@ -191,6 +200,8 @@
   cursor: not-allowed;
   transform: none;
 }
+
+/* Patient info display */
 .patient-info {
   text-align: center;
   padding: 8px 15px;
@@ -203,6 +214,20 @@
   color: #1976d2;
   font-weight: 500;
 }
+
+/* Typing cursor animation */
+.typing-cursor {
+  animation: blink 1s infinite;
+  font-weight: bold;
+  color: #28a745;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .chatbot-container {
     margin: 10px;

@@ -1,4 +1,4 @@
-# CHD Diagnosis System 🫀
+# CHD Diagnosis System 
 
 A smart web application that helps predict coronary heart disease risk using machine learning, complete with an AI chatbot for health guidance.
 
@@ -26,11 +26,11 @@ npm start
 ```
 ## Features
 
-✅ **Machine Learning Models** - Random Forest and Logistic Regression  
-✅ **Interactive Dashboard** - Real-time risk assessment  
-✅ **AI Chatbot** - 24/7 health guidance  
-✅ **Data Visualization** - Clear results and insights  
-✅ **Responsive Design** - Works on all devices  
+**Machine Learning Models** - Random Forest and Logistic Regression  
+**Interactive Dashboard** - Real-time risk assessment  
+**AI Chatbot** - 24/7 health guidance  
+**Data Visualization** - Clear results and insights  
+**Responsive Design** - Works on all devices  
 
 ## Project Structure
 
@@ -89,8 +89,4 @@ Found a bug or have an idea? Feel free to open an issue or submit a pull request
 
 ## Disclaimer
 
-⚠️ **Important**: This tool is for educational purposes only. Always consult with healthcare professionals for medical decisions.
-
----
-
-Made with ❤️ for better heart health awareness
+ **Important**: This tool is for educational purposes only. Always consult with healthcare professionals for medical decisions.

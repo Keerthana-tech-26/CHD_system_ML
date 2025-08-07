@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   getChatHistory,
   sendChatMessage,
@@ -13,7 +13,15 @@ const Chatbot = () => {
   const [latestDiagnosis, setLatestDiagnosis] = useState(null);
   const [contextUsed, setContextUsed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
+  const chatWindowRef = useRef(null);
   const patientName = localStorage.getItem("currentPatientName") || localStorage.getItem("patientId");
+
+  useEffect(() => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   useEffect(() => {
     if (!patientName) {
@@ -27,30 +35,28 @@ const Chatbot = () => {
       setIsLoading(false);
       return;
     }
-    
+
     const fetchChatHistoryAndDiagnosis = async () => {
       setIsLoading(true);
-      
+
       try {
-        // Fetch chat history
         console.log("🔍 Fetching chat history for patient:", patientName);
         const history = await getChatHistory(patientName);
         console.log("📨 Fetched chat history:", history);
-        
+
         if (Array.isArray(history) && history.length > 0) {
           const formattedMessages = [];
           history.forEach((chat, index) => {
-            // Add user message
             formattedMessages.push({ 
               message: chat.message,
               timestamp: chat.createdAt,
               id: `user-${index}` 
             });
-            // Add bot reply
             formattedMessages.push({ 
               reply: chat.reply,
               timestamp: chat.createdAt,
-              id: `bot-${index}` 
+              id: `bot-${index}`,
+              isComplete: true // Mark as complete for existing messages
             });
           });
           setMessages(formattedMessages);
@@ -63,13 +69,12 @@ const Chatbot = () => {
         console.error("❌ Failed to load chat history:", err);
         setMessages([]);
       }
-      
+
       try {
-        // Fetch latest diagnosis
         console.log("🔍 Fetching latest diagnosis for patient:", patientName);
         const diagnosis = await getLatestDiagnosis(patientName);
         console.log("🩺 Latest diagnosis:", diagnosis);
-        
+
         if (diagnosis && (diagnosis.prediction !== undefined || diagnosis.result !== undefined)) {
           setLatestDiagnosis(diagnosis);
           setContextUsed(false);
@@ -82,20 +87,51 @@ const Chatbot = () => {
         console.error("❌ Failed to fetch latest diagnosis:", err);
         setLatestDiagnosis(null);
       }
-      
+
       setIsLoading(false);
     };
-    
+
     fetchChatHistoryAndDiagnosis();
   }, [patientName]);
 
-  const handleSendMessage = async () => {
-    if (!input.trim()) return;
+  const typeMessage = (fullMessage, messageId) => {
+    let currentText = "";
+    let charIndex = 0;
     
+    const typeInterval = setInterval(() => {
+      if (charIndex < fullMessage.length) {
+        currentText += fullMessage[charIndex];
+        
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            msg.id === messageId 
+              ? { ...msg, reply: currentText, isTyping: true }
+              : msg
+          )
+        );
+        
+        charIndex++;
+      } else {
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            msg.id === messageId 
+              ? { ...msg, reply: fullMessage, isTyping: false, isComplete: true }
+              : msg
+          )
+        );
+        setIsTyping(false);
+        clearInterval(typeInterval);
+      }
+    }, 30);
+    return typeInterval;
+  };
+
+  const handleSendMessage = async () => {
+    if (!input.trim() || isTyping) return;
+
     const userMessage = input.trim();
     const timestamp = new Date();
-    
-    // Add user message immediately
+
     const newUserMessage = { 
       message: userMessage, 
       timestamp,
@@ -103,10 +139,22 @@ const Chatbot = () => {
     };
     setMessages(prevMessages => [...prevMessages, newUserMessage]);
     setInput("");
+    
+    const botMessageId = `bot-${Date.now()}`;
+    const emptyBotMessage = {
+      reply: "",
+      timestamp: new Date(),
+      id: botMessageId,
+      isTyping: true,
+      isComplete: false
+    };
+    
+    setMessages(prevMessages => [...prevMessages, emptyBotMessage]);
+    setIsTyping(true);
 
     try {
       let context = null;
-      
+
       if (latestDiagnosis) {
         context = {
           prediction: latestDiagnosis.prediction ?? latestDiagnosis.result,
@@ -115,7 +163,6 @@ const Chatbot = () => {
         };
       }
 
-      // Send message to backend
       const response = await fetch(`http://localhost:4000/api/chatbot/respond`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -132,25 +179,15 @@ const Chatbot = () => {
 
       const data = await response.json();
       console.log("🤖 Bot response:", data);
-      
-      // Add bot reply
-      const botReply = { 
-        reply: data.reply || "⚠️ No response from bot.",
-        timestamp: new Date(),
-        id: `bot-${Date.now()}`
-      };
-      setMessages(prevMessages => [...prevMessages, botReply]);
+      const fullReply = data.reply || "⚠️ No response from bot.";
+      typeMessage(fullReply, botMessageId);
 
       if (!contextUsed && latestDiagnosis) setContextUsed(true);
-      
+
     } catch (err) {
       console.error("❌ Chatbot error:", err);
-      const errorReply = { 
-        reply: "⚠️ Something went wrong. Please try again.",
-        timestamp: new Date(),
-        id: `error-${Date.now()}`
-      };
-      setMessages(prevMessages => [...prevMessages, errorReply]);
+      const errorReply = "⚠️ Something went wrong. Please try again."; 
+      typeMessage(errorReply, botMessageId);
     }
   };
 
@@ -166,28 +203,26 @@ const Chatbot = () => {
       alert("No patient ID found. Cannot clear chat history.");
       return;
     }
-    
-    // Show confirmation dialog
+
     const confirmClear = window.confirm("Are you sure you want to clear all chat history? This action cannot be undone.");
     if (!confirmClear) return;
-    
+
     try {
       console.log("🗑️ Clearing chat history for patient:", patientName);
       const result = await clearChatHistory(patientName);
       console.log("✅ Clear chat result:", result);
-      
+
       if (result.success) {
         setMessages([]);
         console.log("✅ Chat history cleared successfully");
-        
-        // Show success message temporarily
+
         setMessages([{
           reply: "✅ Chat history cleared successfully!",
           timestamp: new Date(),
-          id: "clear-success"
+          id: "clear-success",
+          isComplete: true
         }]);
-        
-        // Remove success message after 2 seconds
+
         setTimeout(() => {
           setMessages([]);
         }, 2000);
@@ -216,7 +251,7 @@ const Chatbot = () => {
   return (
     <div className="chatbot-container">
       <h2>💬 AI Health Assistant</h2>
-      <div className="chat-window">
+      <div className="chat-window" ref={chatWindowRef}>
         {messages.length === 0 ? (
           <div className="no-messages">
             <p>👋 Hello! Ask me about your heart disease risk.</p>
@@ -231,15 +266,25 @@ const Chatbot = () => {
               {msg.message && (
                 <div className="user-message">{msg.message}</div>
               )}
-              {msg.reply && (
-                <div
-                  className="bot-reply"
-                  dangerouslySetInnerHTML={{
-                    __html: msg.reply.replace(/\n/g, "<br/>"),
-                  }}
-                />
+              {(msg.reply || msg.reply === "") && (
+                <>
+                  <div
+                    className="bot-reply"
+                    dangerouslySetInnerHTML={{
+                      __html: msg.reply.replace(/\n/g, "<br/>") + (msg.isTyping ? '<span class="typing-cursor">|</span>' : '')
+                    }}
+                  />
+                  {msg.timestamp && (
+                    <div className="message-timestamp">
+                      {new Date(msg.timestamp).toLocaleTimeString()}
+                      {msg.isComplete && (
+                        <span className="model-attribution"> • OpenRouter (DeepSeek)</span>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
-              {msg.timestamp && (
+              {msg.message && msg.timestamp && (
                 <div className="message-timestamp">
                   {new Date(msg.timestamp).toLocaleTimeString()}
                 </div>
@@ -254,19 +299,19 @@ const Chatbot = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
-          placeholder="Ask something..."
-          disabled={isLoading}
+          placeholder={isTyping ? "AI is typing..." : "Ask something..."}
+          disabled={isLoading || isTyping}
         />
         <button 
           onClick={handleSendMessage} 
-          disabled={!input.trim() || isLoading}
+          disabled={!input.trim() || isLoading || isTyping}
         >
-          Send
+          {isTyping ? "..." : "Send"}
         </button>
         <button 
           onClick={handleClearChat} 
           className="clear-btn"
-          disabled={isLoading}
+          disabled={isLoading || isTyping}
         >
           Clear Chat
         </button>
