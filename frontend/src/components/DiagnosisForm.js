@@ -130,7 +130,7 @@ export default function DiagnosisForm() {
     <div className="diagnosis-form-container">
       <div className="form-header">
         <h2>🏥 CHD Diagnosis Assessment</h2>
-        <p>Complete cardiovascular risk evaluation</p>
+        <p>Complete CHD risk evaluation</p>
       </div>
 
       <form onSubmit={handleSubmit} className="diagnosis-form">
