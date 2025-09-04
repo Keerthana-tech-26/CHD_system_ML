@@ -1,0 +1,485 @@
+.diagnosis-form-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, 
+    rgba(37, 99, 235, 0.05) 0%, 
+    rgba(59, 130, 246, 0.08) 25%,
+    rgba(249, 250, 251, 0.95) 50%,
+    rgba(16, 185, 129, 0.05) 100%);
+  min-height: calc(100vh - 80px);
+  padding-top: var(--spacing-2xl);
+}
+
+.form-header {
+  background: white;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.form-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+  animation: slideIn 1.5s ease-out 0.5s forwards;
+}
+
+@keyframes slideIn {
+  to { left: 0; }
+}
+
+.form-header h2 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--gray-800);
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary-blue), var(--medical-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.form-header p {
+  margin: 0;
+  color: var(--gray-500);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+}
+
+.diagnosis-form {
+  background: white;
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+.form-section {
+  padding: var(--spacing-2xl);
+  border-bottom: 1px solid var(--gray-100);
+  position: relative;
+}
+
+.form-section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  margin: 0 0 var(--spacing-xl) 0;
+  color: var(--gray-800);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  padding-bottom: var(--spacing-md);
+  border-bottom: 3px solid var(--gray-100);
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+  border-radius: 2px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.label-text {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--gray-700);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.025em;
+}
+
+.form-group input,
+.form-group select {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  font-family: inherit;
+  appearance: none;
+  position: relative;
+}
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right var(--spacing-md) center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: var(--spacing-2xl);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  transform: translateY(-2px);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: var(--gray-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-group input::placeholder {
+  color: var(--gray-400);
+  font-style: italic;
+}
+
+.model-selection {
+  text-align: center;
+}
+
+.model-description {
+  font-size: var(--font-size-lg);
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-2xl);
+  font-weight: 500;
+}
+
+.model-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.model-card {
+  background: white;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.model-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(37, 99, 235, 0.05) 0%, 
+    rgba(16, 185, 129, 0.05) 100%);
+  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.model-card:hover::before {
+  left: 0;
+}
+
+.model-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary-blue-light);
+}
+
+.model-card.selected {
+  border-color: var(--primary-blue);
+  background: linear-gradient(135deg, 
+    rgba(37, 99, 235, 0.08) 0%, 
+    rgba(16, 185, 129, 0.08) 100%);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+}
+
+.model-card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  width: 28px;
+  height: 28px;
+  background: var(--primary-blue);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: var(--font-size-sm);
+  animation: checkmark 0.3s ease-out;
+}
+
+@keyframes checkmark {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.model-icon {
+  font-size: 3em;
+  margin-bottom: var(--spacing-lg);
+  filter: grayscale(20%);
+  transition: filter 0.3s ease;
+}
+
+.model-card:hover .model-icon,
+.model-card.selected .model-icon {
+  filter: grayscale(0%);
+}
+
+.model-card h4 {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--gray-800);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.model-card p {
+  margin: 0;
+  color: var(--gray-500);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+
+.form-submit-section {
+  padding: var(--spacing-2xl);
+  background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+  text-align: center;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--medical-green), var(--medical-green-light));
+  color: white;
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.btn-submit:hover::before {
+  left: 100%;
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(5, 150, 105, 0.4);
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-submit:disabled:hover {
+  box-shadow: var(--shadow-lg);
+}
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.form-group input:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: var(--medical-red);
+  background-color: rgba(220, 38, 38, 0.05);
+}
+
+.form-group input:valid:not(:focus):not(:placeholder-shown) {
+  border-color: var(--medical-green);
+  background-color: rgba(5, 150, 105, 0.05);
+}
+.form-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.form-section:nth-child(2) { animation-delay: 0.1s; }
+.form-section:nth-child(3) { animation-delay: 0.2s; }
+.form-section:nth-child(4) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.form-group {
+  position: relative;
+}
+
+.form-group::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+  border-radius: 1px;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.form-group:focus-within::after {
+  transform: scaleX(1);
+}
+@media (max-width: 768px) {
+  .diagnosis-form-container {
+    padding: var(--spacing-md);
+    padding-top: var(--spacing-lg);
+  }
+  
+  .form-header {
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+  
+  .form-header h2 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .form-section {
+    padding: var(--spacing-xl);
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .model-cards {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .model-card {
+    padding: var(--spacing-xl);
+  }
+  
+  .btn-submit {
+    width: 100%;
+    justify-content: center;
+    padding: var(--spacing-lg);
+  }
+}
+@media (max-width: 480px) {
+  .form-header h2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .section-title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .model-card {
+    padding: var(--spacing-lg);
+  }
+  
+  .model-icon {
+    font-size: 2.5em;
+  }
+  
+  .form-submit-section {
+    padding: var(--spacing-lg);
+  }
+}
+.form-group input:focus,
+.form-group select:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+@media (hover: none) and (pointer: coarse) {
+  .model-card:hover {
+    transform: none;
+  }
+  
+  .model-card:active {
+    transform: scale(0.98);
+  }
+  
+  .btn-submit:hover {
+    transform: none;
+  }
+  
+  .btn-submit:active {
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-contrast: high) {
+  .form-group input,
+  .form-group select {
+    border-width: 3px;
+  }
+  
+  .model-card {
+    border-width: 3px;
+  }
+  
+  .btn-submit {
+    border: 3px solid var(--gray-800);
+  }
+}
