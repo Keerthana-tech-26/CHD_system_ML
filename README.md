@@ -17,6 +17,7 @@ This project is a **Coronary Heart Disease (CHD) Diagnosis System** that combine
 
 ## Project Structure
 CHD-DIAGNOSIS-SYSTEM
+
 ├── backend/ # Node.js + Express server
 │   ├── config/ # DB configuration
 │   ├── controllers/ # Business logic
@@ -25,18 +26,21 @@ CHD-DIAGNOSIS-SYSTEM
 │   ├── routes/ # Express routes
 │   ├── .env # Environment variables
 │   └── server.js # Entry point
-│
+
+
 ├── frontend/ # React frontend
 │   ├── public/ # Public assets
 │   └── src/ # React components, styles, services
-│
+
+
 ├── ml-api/ # Python Flask ML API
 │   ├── data/ # Datasets
 │   ├── models/ # Trained models + preprocessors
 │   ├── utils/ # Helper functions
 │   ├── app.py # Flask entry point
 │   └── requirements.txt # Python dependencies
-│
+
+
 └── .vscode/ # Editor config
 
 ## Tech Stack
