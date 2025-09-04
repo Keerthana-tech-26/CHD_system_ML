@@ -18,28 +18,28 @@ This project is a **Coronary Heart Disease (CHD) Diagnosis System** that combine
 ## Project Structure
 CHD-DIAGNOSIS-SYSTEM
 ├── backend/ # Node.js + Express server
-│ ├── config/ # DB configuration
-│ ├── controllers/ # Business logic
-│ ├── database/ # JSON/mock database
-│ ├── models/ # Mongoose models
-│ ├── routes/ # Express routes
-│ ├── .env # Environment variables
-│ └── server.js # Entry point
+│   ├── config/ # DB configuration
+│   ├── controllers/ # Business logic
+│   ├── database/ # JSON/mock database
+│   ├── models/ # Mongoose models
+│   ├── routes/ # Express routes
+│   ├── .env # Environment variables
+│   └── server.js # Entry point
 │
 ├── frontend/ # React frontend
-│ ├── public/ # Public assets
-│ └── src/ # React components, styles, services
+│   ├── public/ # Public assets
+│   └── src/ # React components, styles, services
 │
 ├── ml-api/ # Python Flask ML API
-│ ├── data/ # Datasets
-│ ├── models/ # Trained models + preprocessors
-│ ├── utils/ # Helper functions
-│ ├── app.py # Flask entry point
-│ └── requirements.txt # Python dependencies
+│   ├── data/ # Datasets
+│   ├── models/ # Trained models + preprocessors
+│   ├── utils/ # Helper functions
+│   ├── app.py # Flask entry point
+│   └── requirements.txt # Python dependencies
 │
 └── .vscode/ # Editor config
 
-## ⚙️ Tech Stack
+## Tech Stack
 - **Frontend**: React.js  
 - **Backend**: Node.js + Express  
 - **ML API**: Python (Flask)  
@@ -55,13 +55,18 @@ CHD-DIAGNOSIS-SYSTEM
 cd backend
 npm install
 npm start
+```
 
 ### Frontend
+```bash
 cd frontend
 npm install
 npm start
+```
 
-###ML-API
+### ML API
+```bash
 cd ml-api
 pip install -r requirements.txt
 python app.py
+```
