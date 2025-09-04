@@ -17,7 +17,7 @@ This project is a **Coronary Heart Disease (CHD) Diagnosis System** that combine
 
 ## Project Structure
 
-![Project Structure]("C:\KEERTHANA\ENGINEERING\Major project\file.png")
+![Project Structure](project-structure.png)
 
 ## Tech Stack
 - **Frontend**: React.js  
