@@ -86,7 +86,7 @@
 .no-messages {
   text-align: center;
   padding: var(--spacing-2xl);
-  color: var(--gray-500);
+  color: white;
   background: linear-gradient(135deg, var(--gray-50) 0%, rgb(121, 102, 102) 100%);
   border-radius: var(--radius-xl);
   border: 2px dashed var(--gray-200);
@@ -102,7 +102,7 @@
 .no-messages p:first-child {
   font-size: var(--font-size-xl);
   font-weight: 700;
-  color: var(--gray-700);
+  color: var(--gray-100);
 }
 
 .chat-bubble {
@@ -250,6 +250,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--gray-50);
   font-family: inherit;
+  color: #000000 !important;
 }
 
 .input-area input:focus {
@@ -267,7 +268,7 @@
 }
 
 .input-area input::placeholder {
-  color: var(--gray-400);
+  color: var(--gray-500) !important;
   font-style: italic;
 }
 
@@ -354,7 +355,7 @@
 }
 
 .patient-info small {
-  color: var(--gray-600);
+  color: var(--gray-300);
   font-weight: 600;
   font-size: var(--font-size-sm);
   display: flex;
@@ -539,12 +540,14 @@
   .input-area {
     background: var(--gray-800);
     border-color: var(--gray-600);
+    color: var(--gray-100);
   }
   
   .input-area input {
     background: var(--gray-700);
     border-color: var(--gray-600);
-    color: var(--gray-100);
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
   }
   
   .patient-info {
