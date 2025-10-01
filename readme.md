@@ -13,7 +13,7 @@ AI-powered system for **Coronary Heart Disease (CHD) risk prediction**, patient 
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 CHD-DIAGNOSIS-AIML/
 │
