@@ -15,30 +15,48 @@ AI-powered system for **Coronary Heart Disease (CHD) risk prediction**, patient 
 
 ## 📂 Project Structure
 
-CHD-DIAGNOSIS-AIML/
+CHD-DIAGNOSIS-AI-ML/
 │
-├── backend/ # Node.js + Express API
-│ ├── config/
-│ ├── controllers/
-│ ├── database/
-│ ├── models/
-│ ├── routes/
+├── backend/                      # Node.js + Express API
+│   ├── config/
+│   ├── controllers/
+│   ├── database/
+│   ├── models/
+│   ├── routes/
+│   ├── .env                     # Environment variables
+│   ├── migrate-chats.js         # Chat migration script
+│   ├── requirement.txt          # Backend dependencies
+│   ├── package.json
+│   └── server.js                # Entry point
 │
-├── frontend/ # React.js UI
-│ ├── public/
-│ ├── src/
-│ │ ├── components/
-│ │ ├── services/
-│ │ ├── styles/
-│ │ ├── utils/
+├── frontend/                     # React.js UI
+│   ├── node_modules/
+│   ├── public/                  # Static assets
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/
+│   │   ├── styles/
+│   │   ├── utils/
+│   │   ├── App.css
+│   │   ├── App.js
+│   │   ├── App.test.js
+│   │   ├── index.css
+│   │   ├── index.js
+│   │   └── setupTests.js
+│   ├── res.json()               # Response helper
+│   ├── setMetrics(data)         # Metrics setter
+│   ├── package.json
+│   └── package-lock.json
 │
-├── ml-api/ # Python Flask ML API
-│ ├── catboost_info/
-│ ├── data/
-│ ├── models/
+├── ml-api/
+│   ├── catboost_info/
+│   ├── data/
+│   ├── models/
+│   ├── app.py                   # Flask API server
+│   ├── requirements.txt         # Python dependencies
 │
-├── env/ # Python virtual environment
-└── .vscode/ # VS Code settings
+├── env/                         # Python virtual environment
+└── .vscode/                     # VS Code settings
 
 ---
 
