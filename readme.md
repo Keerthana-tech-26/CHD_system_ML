@@ -14,11 +14,31 @@ AI-powered system for **Coronary Heart Disease (CHD) risk prediction**, patient 
 ---
 
 ## Project Structure
-CHD-DIAGNOSIS-AIML
+
+CHD-DIAGNOSIS-AIML/
+│
 ├── backend/ # Node.js + Express API
+│ ├── config/
+│ ├── controllers/
+│ ├── database/
+│ ├── models/
+│ ├── routes/
+│
 ├── frontend/ # React.js UI
-├── ml-api/ # Python Flask ML models
-└── env/ # Python virtual environment
+│ ├── public/
+│ ├── src/
+│ │ ├── components/
+│ │ ├── services/
+│ │ ├── styles/
+│ │ ├── utils/
+│
+├── ml-api/ # Python Flask ML API
+│ ├── catboost_info/
+│ ├── data/
+│ ├── models/
+│
+├── env/ # Python virtual environment
+└── .vscode/ # VS Code settings
 
 ---
 
