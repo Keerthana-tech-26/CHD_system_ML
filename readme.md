@@ -7,7 +7,7 @@ A comprehensive Coronary Heart Disease (CHD) Diagnosis System powered by advance
 ## Project Structure
 
 ```
-CHD-DIAGNOSIS-WITH-ML-DUP/
+CHD-DIAGNOSIS-AIML/
 │
 ├── backend/                    # Node.js + Express API
 │   ├── config/
