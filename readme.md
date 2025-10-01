@@ -56,7 +56,6 @@ CHD-DIAGNOSIS-AI-ML/
 │   ├── requirements.txt         # Python dependencies
 │
 ├── env/                         # Python virtual environment
-
 └── .vscode/                     # VS Code settings
 
 ---
