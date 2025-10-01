@@ -1,0 +1,638 @@
+.patient-history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, 
+    rgba(37, 99, 235, 0.05) 0%, 
+    rgba(59, 130, 246, 0.08) 25%,
+    rgba(249, 250, 251, 0.95) 50%,
+    rgba(16, 185, 129, 0.05) 100%);
+  min-height: calc(100vh - 80px);
+  padding-top: var(--spacing-2xl);
+  font-family: inherit;
+}
+
+.page-title {
+  text-align: center;
+  margin: 0 0 var(--spacing-2xl) 0;
+  color: var(--gray-800);
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary-blue), var(--medical-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.page-title::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+  border-radius: 2px;
+}
+
+.no-predictions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.no-predictions p {
+  background: white;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-2xl);
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+  color: var(--gray-500);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  border: 2px dashed var(--gray-200);
+  max-width: 400px;
+  margin: 0;
+}
+
+.patient-card {
+  background: white;
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: slideInUp 0.6s ease-out;
+}
+
+.patient-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+  animation: slideInGradient 1s ease-out 0.3s forwards;
+  transform: translateX(-100%);
+}
+
+@keyframes slideInGradient {
+  to { transform: translateX(0); }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.patient-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+.patient-name {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  position: relative;
+}
+
+.patient-name::before {
+  content: "👤";
+  font-size: var(--font-size-xl);
+  padding: var(--spacing-sm);
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: grayscale(0%);
+}
+
+.total-predictions {
+  color: var(--gray-500);
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--spacing-xl) 0;
+  font-weight: 600;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--primary-blue);
+  display: inline-block;
+}
+
+.predictions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.prediction-item {
+  background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  border-left: 6px solid var(--primary-blue);
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.prediction-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(37, 99, 235, 0.03) 0%, 
+    rgba(16, 185, 129, 0.03) 100%);
+  transition: left 0.5s ease;
+}
+
+.prediction-item:hover::before {
+  left: 0;
+}
+
+.prediction-item:hover {
+  transform: translateX(8px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+}
+
+.prediction-detail {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-base);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.prediction-detail:last-of-type {
+  border-bottom: none;
+  margin-bottom: var(--spacing-lg);
+}
+
+.prediction-detail strong {
+  color: var(--gray-700);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.prediction-result {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-xl);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  position: relative;
+  overflow: hidden;
+}
+
+.prediction-result::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+.prediction-result.at-risk {
+  background: linear-gradient(135deg, var(--medical-red), var(--medical-red-light));
+  color: white;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.prediction-result.at-risk::after {
+  content: "⚠️";
+  margin-left: var(--spacing-xs);
+}
+
+.prediction-result.not-at-risk {
+  background: linear-gradient(135deg, var(--medical-green), var(--medical-green-light));
+  color: white;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+}
+
+.prediction-result.not-at-risk::after {
+  content: "✅";
+  margin-left: var(--spacing-xs);
+}
+
+.confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-xl);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.confidence-badge::before {
+  content: "📊";
+  margin-right: var(--spacing-sm);
+}
+
+.confidence-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.delete-button {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: linear-gradient(135deg, var(--medical-red), var(--medical-red-light));
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.delete-button::before {
+  content: "🗑️";
+}
+
+.delete-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.delete-button:hover::after {
+  left: 100%;
+}
+
+.delete-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+}
+
+.delete-button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.chart-section {
+  background: white;
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-2xl);
+  margin-top: var(--spacing-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--gray-200);
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+  animation: slideInGradient 1s ease-out 0.5s forwards;
+  transform: translateX(-100%);
+}
+
+.chart-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-xl) 0;
+  text-align: center;
+  position: relative;
+  padding-bottom: var(--spacing-md);
+}
+
+.chart-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--medical-green));
+  border-radius: 2px;
+}
+
+.chart-container {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.legend-container {
+  display: flex;
+  gap: var(--spacing-xl);
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--gray-200);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: 600;
+  color: var(--gray-700);
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.legend-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.legend-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  border-radius: 50%;
+  filter: brightness(1.2);
+}
+
+.next-button {
+  margin: var(--spacing-2xl) auto 0;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
+  color: white;
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  min-width: 180px;
+}
+
+.next-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.next-button:hover::before {
+  left: 100%;
+}
+
+.next-button::after {
+  content: "🚀";
+  font-size: var(--font-size-lg);
+}
+
+.next-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4);
+}
+
+.next-button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+@media (max-width: 768px) {
+  .patient-history-container {
+    padding: var(--spacing-md);
+    padding-top: var(--spacing-lg);
+  }
+  
+  .page-title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .patient-card {
+    padding: var(--spacing-xl);
+  }
+  
+  .patient-name {
+    font-size: var(--font-size-xl);
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .prediction-item {
+    padding: var(--spacing-lg);
+  }
+  
+  .prediction-detail {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .legend-container {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .chart-container {
+    padding: var(--spacing-md);
+  }
+  
+  .next-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .patient-card {
+    padding: var(--spacing-lg);
+  }
+  
+  .patient-name {
+    font-size: var(--font-size-lg);
+  }
+  
+  .chart-section {
+    padding: var(--spacing-lg);
+  }
+  
+  .chart-container {
+    padding: var(--spacing-sm);
+  }
+  
+  .prediction-item {
+    padding: var(--spacing-md);
+  }
+}
+.patient-history-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.patient-history-container::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 4px;
+}
+
+.patient-history-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-blue), var(--medical-green));
+  border-radius: 4px;
+}
+
+.patient-history-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--primary-blue-dark), var(--medical-green));
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.loading {
+  animation: pulse 2s infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .patient-card,
+  .chart-section,
+  .prediction-item {
+    border-width: 3px;
+  }
+  
+  .next-button,
+  .delete-button {
+    border: 3px solid var(--gray-800);
+  }
+}
+@media (hover: none) and (pointer: coarse) {
+  .patient-card:hover,
+  .prediction-item:hover,
+  .legend-item:hover {
+    transform: none;
+  }
+  
+  .patient-card:active {
+    transform: scale(0.98);
+  }
+  
+  .prediction-item:active {
+    transform: scale(0.98);
+  }
+  
+  .next-button:hover,
+  .delete-button:hover {
+    transform: none;
+  }
+  
+  .next-button:active,
+  .delete-button:active {
+    transform: scale(0.98);
+  }
+}
+html {
+  scroll-behavior: smooth;
+}
+.delete-button:focus,
+.next-button:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
